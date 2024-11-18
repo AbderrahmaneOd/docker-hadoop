@@ -1,0 +1,31 @@
+FROM openjdk:8-jdk
+
+# Set environment variables for Hadoop and Tez versions
+ENV HADOOP_VERSION=2.7.4
+ENV TEZ_VERSION=0.9.2
+ENV HADOOP_HOME=/opt/hadoop
+ENV TEZ_HOME=/opt/tez
+ENV TEZ_CONF_DIR=${TEZ_HOME}/conf
+ENV TEZ_JARS=${TEZ_HOME}
+ENV PATH=${PATH}:${HADOOP_HOME}/bin
+
+
+# Install Hadoop client (without daemons)
+RUN wget https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz && \
+    tar -xzf hadoop-${HADOOP_VERSION}.tar.gz -C /opt/ && \
+    rm hadoop-${HADOOP_VERSION}.tar.gz && \
+    ln -s /opt/hadoop-${HADOOP_VERSION} /opt/hadoop
+
+# Install Apache Tez
+RUN wget https://dlcdn.apache.org/tez/${TEZ_VERSION}/apache-tez-${TEZ_VERSION}-bin.tar.gz && \
+    tar -xzf apache-tez-${TEZ_VERSION}-bin.tar.gz -C /opt/ && \
+    rm apache-tez-${TEZ_VERSION}-bin.tar.gz && \
+    mv /opt/apache-tez-${TEZ_VERSION}-bin /opt/tez
+
+
+
+# Set HADOOP_CLASSPATH to include Tez JARs
+ENV HADOOP_CLASSPATH=${TEZ_JARS}/*:${TEZ_JARS}/lib/*:${TEZ_CONF_DIR}
+
+# Set default command
+CMD ["bash"]

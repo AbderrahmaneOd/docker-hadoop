@@ -1,0 +1,13 @@
+FROM openjdk:8-jdk
+
+# Download and install Apache Pig
+RUN wget https://dlcdn.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz && \
+    tar -xzvf pig-0.17.0.tar.gz -C /opt && \
+    rm pig-0.17.0.tar.gz
+
+# Set environment variables
+ENV PIG_HOME=/opt/pig-0.17.0
+ENV PATH=$PIG_HOME/bin:$PATH
+
+# Default command
+CMD ["bash"]
