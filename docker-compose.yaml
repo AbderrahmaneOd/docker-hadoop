@@ -39,8 +39,6 @@ services:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 resourcemanager:8088"
     env_file:
     - ./hadoop.env
-    volumes:
-    - ./config-nodemanager:/opt/hadoop/etc/hadoop
 
   historyserver:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
