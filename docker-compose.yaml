@@ -2,24 +2,24 @@ services:
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
     volumes:
-      - namenode:/hadoop/dfs/name
+    - namenode:/hadoop/dfs/name
     environment:
-      - CLUSTER_NAME=test
+    - CLUSTER_NAME=test
     env_file:
-      - ./hadoop.env
+    - ./hadoop.env
     ports:
-      - "50070:50070"
-  
+    - "50070:50070"
+
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
     volumes:
-      - datanode:/hadoop/dfs/data
+    - datanode:/hadoop/dfs/data
     env_file:
-      - ./hadoop.env
+    - ./hadoop.env
     environment:
       SERVICE_PRECONDITION: "namenode:50070"
     ports:
-      - "50075:50075"
+    - "50075:50075"
 
   resourcemanager:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop2.7.4-java8
@@ -27,9 +27,9 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075"
     env_file:
-      - ./hadoop.env
+    - ./hadoop.env
     ports:
-      - 8088:8088
+    - 8088:8088
 
   nodemanager:
     image: bde2020/hadoop-nodemanager:2.0.0-hadoop2.7.4-java8
@@ -44,34 +44,39 @@ services:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
     container_name: historyserver
     volumes:
-      - historyserver:/hadoop/yarn/timeline
+    - historyserver:/hadoop/yarn/timeline
     environment:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 resourcemanager:8088"
     env_file:
-      - ./hadoop.env
+    - ./hadoop.env
     ports:
-      - 8188:8188
+    - 8188:8188
   
   hive-server:
     image: bde2020/hive:2.3.2-postgresql-metastore
     env_file:
-      - ./hadoop.env
+    - ./hadoop.env
     environment:
-      HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
       SERVICE_PRECONDITION: "hive-metastore:9083"
+      TEZ_CONF_DIR: /opt/tez/conf
+      HADOOP_CLASSPATH: /opt/tez/conf:/opt/tez/*:/opt/tez/lib/*
+    depends_on:
+    - tez
+    volumes:
+    - tez-libs:/opt/tez
     ports:
-      - "10000:10000"
-  
+    - "10000:10000"
+
   hive-metastore:
     image: bde2020/hive:2.3.2-postgresql-metastore
     env_file:
-      - ./hadoop.env
+    - ./hadoop.env
     command: /opt/hive/bin/hive --service metastore
     environment:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 hive-metastore-postgresql:5432"
     ports:
-      - "9083:9083"
-  
+    - "9083:9083"
+
   hive-metastore-postgresql:
     image: bde2020/hive-metastore-postgresql:2.3.0
 
@@ -114,11 +119,13 @@ services:
     - ./config-tez/tez-site.xml:/opt/tez/conf/tez-site.xml
     - ./config-tez/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
     - ./config-tez/yarn-site.xml:/opt/hadoop/etc/hadoop/yarn-site.xml
+    - ./config-tez/init-tez-lib.sh:/opt/init-tez-lib.sh
+    - tez-libs:/opt/tez
     depends_on:
     - namenode
     - resourcemanager
     - nodemanager
-    command: bash
+    command: bash -c "bash /opt/init-tez-lib.sh && bash"
     stdin_open: true
     tty: true
 
@@ -126,3 +133,4 @@ volumes:
   namenode:
   datanode:
   historyserver:
+  tez-libs:
