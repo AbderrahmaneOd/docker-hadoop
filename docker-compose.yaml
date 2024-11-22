@@ -93,30 +93,6 @@ services:
     stdin_open: true
     tty: true
 
-  spark:
-    image: bde2020/spark-master:2.4.5-hadoop2.7
-    container_name: spark-master
-    depends_on:
-    - namenode
-    - datanode
-    ports:
-    - "8080:8080"
-    - "7077:7077"
-    environment:
-    - INIT_DAEMON_STEP=setup_spark
-    - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-
-  spark-worker:
-    image: bde2020/spark-worker:2.4.5-hadoop2.7
-    container_name: spark-worker
-    depends_on:
-    - spark
-    ports:
-    - "8081:8081"
-    environment:
-    - "SPARK_MASTER=spark://spark:7077"
-    - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-
   tez:
     image: abdeod/apache-tez:hadoop2.7.4-java8
     container_name: tez
@@ -134,8 +110,51 @@ services:
     stdin_open: true
     tty: true
 
+  spark:
+    image: bde2020/spark-master:2.4.5-hadoop2.7
+    container_name: spark
+    ports:
+    - "8080:8080"
+    - "7077:7077"
+    environment:
+    - INIT_DAEMON_STEP=setup_spark
+    volumes:
+    - spark-dist:/spark
+
+  spark-worker:
+    image: bde2020/spark-worker:2.4.5-hadoop2.7
+    container_name: spark-worker
+    depends_on:
+    - spark
+    ports:
+    - "8081:8081"
+    environment:
+    - SPARK_MASTER=spark://spark:7077
+    volumes:
+    - spark-dist:/spark
+
+  zeppelin:
+    image: apache/zeppelin:0.9.0
+    container_name: zeppelin
+    environment:
+      ZEPPELIN_ADDR: "0.0.0.0"
+      ZEPPELIN_PORT: 8085
+      SPARK_HOME: /opt/spark
+      SPARK_MASTER: spark://spark:7077
+      PYSPARK_PYTHON: python3
+      PYSPARK_DRIVER_PYTHON: python3
+    volumes:
+    - zeppelin-data:/zeppelin
+    - spark-dist:/opt/spark
+    ports:
+    - "8085:8085"
+    depends_on:
+    - spark
+
 volumes:
   namenode:
   datanode:
   historyserver:
   tez-libs:
+  spark-dist:
+  zeppelin-data:
