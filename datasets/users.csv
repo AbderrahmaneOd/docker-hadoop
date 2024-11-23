@@ -1,0 +1,5 @@
+UserID,Name,Email,Age,Country,SignupDate
+1,Alice Brown,alice@example.com,30,USA,2022-01-15
+2,Bob Smith,bob@example.com,24,UK,2022-03-12
+3,Charlie Day,charlie@example.com,29,Canada,2023-01-20
+4,Dana White,dana@example.com,35,Australia,2021-11-25

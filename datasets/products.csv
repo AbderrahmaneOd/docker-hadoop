@@ -1,0 +1,6 @@
+ProductID,Name,CategoryID,Price,Stock
+101,Laptop,1,800.00,50
+102,Smartphone,1,500.00,100
+103,Office Chair,2,120.00,200
+104,Desk,2,250.00,75
+105,Headphones,3,50.00,300
