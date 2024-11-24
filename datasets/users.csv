@@ -3,3 +3,9 @@ UserID,Name,Email,Age,Country,SignupDate
 2,Bob Smith,bob@example.com,24,UK,2022-03-12
 3,Charlie Day,charlie@example.com,29,Canada,2023-01-20
 4,Dana White,dana@example.com,35,Australia,2021-11-25
+5,Eva Garcia,eva@example.com,28,Spain,2023-02-01
+6,Frank Lee,frank@example.com,31,Singapore,2023-02-15
+7,Grace Kim,grace@example.com,27,South Korea,2023-03-01
+8,Henry Chen,henry@example.com,33,Canada,2023-03-10
+9,Iris Wong,iris@example.com,26,Hong Kong,2023-03-20
+10,Jack Wilson,jack@example.com,34,USA,2023-04-01

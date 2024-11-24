@@ -4,3 +4,13 @@ ProductID,Name,CategoryID,Price,Stock
 103,Office Chair,2,120.00,200
 104,Desk,2,250.00,75
 105,Headphones,3,50.00,300
+106,Tablet,1,400.00,80
+107,Monitor,1,300.00,120
+108,Keyboard,1,60.00,250
+109,Mouse Pad,3,15.00,500
+110,Printer,1,200.00,40
+111,Filing Cabinet,2,180.00,60
+112,Wireless Mouse,3,30.00,400
+113,USB Hub,1,25.00,300
+114,Desk Lamp,2,45.00,150
+115,Webcam,1,70.00,200
