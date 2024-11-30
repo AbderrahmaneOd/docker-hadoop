@@ -1,0 +1,5 @@
+ReviewID,UserID,ProductID,Rating,ReviewText
+9001,1,101,5,"Excellent laptop!"
+9002,3,102,4,"Good phone, value for money."
+9003,2,103,3,"Average chair, overpriced."
+9004,4,105,5,"Great sound quality!"
